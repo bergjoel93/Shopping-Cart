@@ -1,0 +1,7 @@
+#product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, calc(250px + 1rem));
+  gap: 1.5rem;
+  justify-content: space-around;
+  max-width: 100%;
+}
