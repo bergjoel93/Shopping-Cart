@@ -12,7 +12,7 @@ export default function Shop() {
   const { products } = useLoaderData();
 
   return (
-    <div className="m-5 ">
+    <div className="p-5 ">
       <h1 className="text-3xl text-bold">Products</h1>
       <div id="product-grid">
         {products.map((product) => (

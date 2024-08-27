@@ -6,6 +6,7 @@ import Index from "./routes";
 import ErrorPage from "./error-page";
 import Shop, { loader as shopLoader } from "./routes/shop";
 import ShoppingCart from "./routes/shoppingCart";
+import Item, { loader as itemLoader } from "./routes/item";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -20,6 +21,11 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Index></Index>,
+          },
+          {
+            path: "/shop/item/:itemId",
+            element: <Item></Item>,
+            loader: itemLoader,
           },
           {
             path: "/shop",
