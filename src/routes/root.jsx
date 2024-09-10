@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 
 export async function loader() {
   const cartCount = await getCartCount();
+  console.log("cartCount:", cartCount);
   return { cartCount };
 }
 

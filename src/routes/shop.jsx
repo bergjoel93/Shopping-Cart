@@ -18,9 +18,9 @@ export async function loader() {
  */
 export async function action({ request, params }) {
   const formData = await request.formData();
-  const productId = formData.get("id");
+  const productId = Number(formData.get("id"));
 
-  const quantity = formData.get("quantity");
+  const quantity = Number(formData.get("quantity"));
   // logic to add to cart
   console.log("ProductId", productId, "Quantity", quantity);
   addToCart(productId, quantity);

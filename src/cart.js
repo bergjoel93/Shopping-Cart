@@ -4,23 +4,18 @@ import { getProducts } from "./products";
  * The purpose of this module is to handle the logic for the shopping cart.
  */
 
-let testCart = [
-  { id: 1, quantity: 2 },
-  { id: 2, quantity: 1 },
-  { id: 3, quantity: 3 },
-];
-
-setCart(testCart);
-
 export async function getItemsInCart() {
   const products = await getProducts(); // Fetch all products
   const cart = await getCart(); // Fetch the current cart
-
+  console.log("cart", cart);
+  console.log("products", products);
   // Map over the cart to get an array of products with their quantities
   const itemsInCart = cart
     .map((cartItem) => {
       // Find the matching product by id
-      const product = products.find((product) => product.id === cartItem.id);
+      const product = products.find(
+        (product) => Number(product.id) === Number(cartItem.id)
+      );
       if (product) {
         // Return a new object combining product data with the quantity from the cart
         return {
@@ -32,6 +27,8 @@ export async function getItemsInCart() {
     })
     .filter((item) => item !== null); // Remove any null values in case of unmatched products
 
+  console.log(itemsInCart);
+
   return itemsInCart;
 }
 
@@ -39,7 +36,7 @@ export async function getCartCount() {
   let cartCount = 0;
   const cart = await getCart();
   cart.forEach((item) => {
-    cartCount += item.quantity;
+    cartCount += Number(item.quantity);
   });
   return cartCount;
 }

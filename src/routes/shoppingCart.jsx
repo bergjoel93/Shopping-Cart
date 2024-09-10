@@ -7,13 +7,11 @@ import { RiDeleteBin6Line } from "@remixicon/react";
 
 export async function loader() {
   const itemsInCart = await getItemsInCart();
-  //console.log(itemsInCart);
+  console.log(itemsInCart);
   return { itemsInCart };
 }
 
 export async function action() {}
-
-function handleOnDelete(e) {}
 
 export default function ShoppingCart() {
   const { itemsInCart } = useLoaderData();
