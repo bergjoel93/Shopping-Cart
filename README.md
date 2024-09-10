@@ -4,13 +4,11 @@ Todo:
 
 - When the user clicks on "Add to cart" button, the id and quantity of that product needs to be recorded and then added to the cart.
 - The value in the quantity text box can't be less than 1.
-- Add anchor tags to the product image, description.
-- Make the prices display only 2 digits after the decimal.
 - Connect the cart button on the nav in the upper right to display the actual number of items in the cart.
 - Create the cart display page that loads the data from the cart into a conveninet list where the user can add and delete the quanityt of things.
-- change the quanitity button into a re-usable component.
 - Implemenent category sorting. Floating buttons at the top of the shop showing all of the categories (in alphabetical order). If user clicks on one, then the only products within that category will be displayed in the shop.
 - Create the product page. When use clicks on item, it will send them to the product page that gives all of the detailed information.
+- Add a Link tag to the title of the site top right.
 
 ## Where I'm Stuck
 

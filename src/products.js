@@ -5,9 +5,12 @@
 export async function getProducts() {
   const result = await fetch("https://fakestoreapi.com/products?limit=30"); // gets the response
   const data = await result.json(); // converts it to a json object.
-
+  //console.log(data);
   return data;
 }
+
+export async function getProductsInCart(cart) {}
+
 /**
  * get's a single product based on id.
  */

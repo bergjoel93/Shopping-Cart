@@ -1,7 +1,48 @@
 import localforage from "localforage";
+import { getProducts } from "./products";
 /**
  * The purpose of this module is to handle the logic for the shopping cart.
  */
+
+let testCart = [
+  { id: 1, quantity: 2 },
+  { id: 2, quantity: 1 },
+  { id: 3, quantity: 3 },
+];
+
+setCart(testCart);
+
+export async function getItemsInCart() {
+  const products = await getProducts(); // Fetch all products
+  const cart = await getCart(); // Fetch the current cart
+
+  // Map over the cart to get an array of products with their quantities
+  const itemsInCart = cart
+    .map((cartItem) => {
+      // Find the matching product by id
+      const product = products.find((product) => product.id === cartItem.id);
+      if (product) {
+        // Return a new object combining product data with the quantity from the cart
+        return {
+          ...product,
+          quantity: cartItem.quantity,
+        };
+      }
+      return null;
+    })
+    .filter((item) => item !== null); // Remove any null values in case of unmatched products
+
+  return itemsInCart;
+}
+
+export async function getCartCount() {
+  let cartCount = 0;
+  const cart = await getCart();
+  cart.forEach((item) => {
+    cartCount += item.quantity;
+  });
+  return cartCount;
+}
 
 export async function getCart() {
   let cart = await localforage.getItem("cart");
@@ -10,7 +51,18 @@ export async function getCart() {
 }
 
 export async function addToCart(id, quantity) {
-  let cart = getCart();
+  let cart = await getCart();
+  // Check if the item already exists in the cart.
+  const existingItem = cart.find((item) => item.id === id);
+
+  if (existingItem) {
+    // If the item exists, increase the quantity
+    existingItem.quantity += quantity;
+  } else {
+    // cIf the item doesn't exist, add it to the cart
+    cart.push({ id, quantity });
+  }
+  await setCart(cart);
 }
 
 export async function setCart(cart) {

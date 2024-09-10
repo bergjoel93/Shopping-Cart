@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import { getProduct } from "../products";
-import { QuantityBtn, AddToCartBtn } from "../components/buttons";
+import { QuantityInput } from "../components/buttons";
 
 export async function loader({ params }) {
   const item = await getProduct(params.itemId);
@@ -27,8 +27,7 @@ export default function Item() {
           <h2 className="font-bold text-3xl">
             {"$" + formatPrice(item.price)}
           </h2>
-          <QuantityBtn></QuantityBtn>
-          <AddToCartBtn></AddToCartBtn>
+          <QuantityInput></QuantityInput>
         </div>
       </div>
     </div>

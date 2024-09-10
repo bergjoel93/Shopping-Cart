@@ -1,24 +1,80 @@
-export function AddToCartBtn() {
+import { useState } from "react";
+import { Form } from "react-router-dom";
+import { addToCart } from "../cart";
+
+export function QuantityInput({ productId, initialQuantity = 1 }) {
+  const [quantity, setQuantity] = useState(initialQuantity);
+
+  const handleIncrease = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const handleDecrease = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+  };
+
+  const handleSubmit = () => {
+    setQuantity(1);
+  };
+
   return (
-    <button className="bg-sky-500 p-2 rounded-lg text-white font-bold cursor hover:bg-sky-700 transition">
+    <Form method="post">
+      <input type="hidden" value={productId} name="id" />
+      <input type="hidden" value={quantity} name="quantity" />
+      <div className="flex flex-col gap-2">
+        <QuantityBtn
+          quantity={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          increaseQuantity={handleIncrease}
+          decreaseQuantity={handleDecrease}
+        ></QuantityBtn>
+        <AddToCartBtn onClick={handleSubmit}></AddToCartBtn>
+      </div>
+    </Form>
+  );
+}
+
+export function AddToCartBtn({ onClick }) {
+  return (
+    <button
+      type="submit"
+      className="bg-slate-800 p-2 rounded-lg text-white font-bold cursor hover:bg-sky-700 transition"
+      onClick={onClick}
+    >
       Add To Cart
     </button>
   );
 }
 
-export function QuantityBtn() {
-  const quantBtns = "p-3 hover:bg-slate-400  transition";
+export function QuantityBtn({
+  quantity,
+  onChange,
+  increaseQuantity,
+  decreaseQuantity,
+}) {
+  const quantBtns = "p-2 hover:bg-slate-400 transition";
   return (
-    <div className="flex items-center align-center shadow-md rounded-lg bg-slate-200">
-      <button className={quantBtns + "rounded-l-lg hover:rounded-l-lg"}>
+    <div className="flex align-center justify-center shadow-md rounded-lg bg-slate-200 w-24">
+      <button
+        type="button"
+        className={quantBtns + "rounded-l-lg hover:rounded-l-lg"}
+        onClick={decreaseQuantity}
+      >
         &mdash;
       </button>
       <input
-        className="w-12 h-12 p-1 text-md text-center bg-white outline-none"
+        className="w-10 h-10 p-1 text-center bg-white outline-none"
         type="text"
-        defaultValue="1"
+        name="quantityDisplay"
+        value={quantity}
+        onChange={onChange}
+        min="1"
       />
-      <button className={quantBtns + "rounded-r-lg hover:rounded-r-lg"}>
+      <button
+        type="button"
+        className={quantBtns + "rounded-r-lg hover:rounded-r-lg"}
+        onClick={increaseQuantity}
+      >
         &#xff0b;
       </button>
     </div>
