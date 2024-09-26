@@ -1,45 +1,40 @@
-import { useState } from "react";
-import { Form } from "react-router-dom";
-import { addToCart } from "../cart";
+// export function QuantityInput({ productId, initialQuantity = 1 }) {
+//   const [quantity, setQuantity] = useState(initialQuantity);
 
-export function QuantityInput({ productId, initialQuantity = 1 }) {
-  const [quantity, setQuantity] = useState(initialQuantity);
+//   const handleIncrease = () => {
+//     setQuantity((prevQuantity) => prevQuantity + 1);
+//   };
 
-  const handleIncrease = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
-  };
+//   const handleDecrease = () => {
+//     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+//   };
 
-  const handleDecrease = () => {
-    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
-  };
+//   const handleSubmit = () => {
+//     //setQuantity(1);
+//   };
 
-  const handleSubmit = () => {
-    setQuantity(1);
-  };
-
-  return (
-    <Form method="post">
-      <input type="hidden" value={productId} name="id" />
-      <input type="hidden" value={quantity} name="quantity" />
-      <div className="flex flex-col gap-2">
-        <QuantityBtn
-          quantity={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          increaseQuantity={handleIncrease}
-          decreaseQuantity={handleDecrease}
-        ></QuantityBtn>
-        <AddToCartBtn onClick={handleSubmit}></AddToCartBtn>
-      </div>
-    </Form>
-  );
-}
+//   return (
+//     <Form method="post">
+//       <input type="hidden" value={productId} name="id" />
+//       <input type="hidden" value={quantity} name="quantity" />
+//       <div className="flex flex-col gap-2">
+//         <QuantityBtn
+//           quantity={quantity}
+//           onChange={(e) => setQuantity(e.target.value)}
+//           increaseQuantity={handleIncrease}
+//           decreaseQuantity={handleDecrease}
+//         ></QuantityBtn>
+//         <AddToCartBtn onClick={handleSubmit}></AddToCartBtn>
+//       </div>
+//     </Form>
+//   );
+// }
 
 export function AddToCartBtn({ onClick }) {
   return (
     <button
       type="submit"
       className="bg-slate-800 p-2 rounded-lg text-white font-bold cursor hover:bg-sky-700 transition"
-      onClick={onClick}
     >
       Add To Cart
     </button>
@@ -48,7 +43,7 @@ export function AddToCartBtn({ onClick }) {
 
 export function QuantityBtn({
   quantity,
-  onChange,
+  onChange = null,
   increaseQuantity,
   decreaseQuantity,
 }) {
@@ -69,6 +64,7 @@ export function QuantityBtn({
         value={quantity}
         onChange={onChange}
         min="1"
+        readOnly
       />
       <button
         type="button"

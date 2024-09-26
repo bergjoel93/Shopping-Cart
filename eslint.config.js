@@ -37,4 +37,10 @@ export default [
       "no-unused-vars": "off",
     },
   },
+  {
+    env: {
+      "jest/globals": true,
+    },
+    plugins: ["jest"],
+  },
 ];

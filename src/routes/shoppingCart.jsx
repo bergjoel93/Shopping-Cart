@@ -1,22 +1,63 @@
-import { useLoaderData } from "react-router-dom";
-import { getCart, getItemsInCart } from "../cart";
-import { getProducts } from "../products";
+import { useState, useEffect } from "react";
+import { getCart, updateCart, deleteItem } from "../cart";
+import { useOutletContext } from "react-router-dom";
 import { Rating } from "react-simple-star-rating";
 import { QuantityBtn } from "../components/buttons";
 import { RiDeleteBin6Line } from "@remixicon/react";
 
-export async function loader() {
-  const itemsInCart = await getItemsInCart();
-  console.log(itemsInCart);
-  return { itemsInCart };
-}
-
-export async function action() {}
-
 export default function ShoppingCart() {
-  const { itemsInCart } = useLoaderData();
-  const product1 = itemsInCart[0];
-  //console.log(product1);
+  const { cart, setCart } = useOutletContext(); // Access cart and setCart from context
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const cartData = await getCart();
+        setCart(cartData);
+        console.log(cart);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load products in cart.");
+        setLoading(false);
+      }
+    };
+    fetchCart();
+  }, [setCart]);
+
+  // Handle quantity increase
+  const handleIncrease = async (item) => {
+    const updatedItem = { ...item, quantity: item.quantity + 1 };
+    await updateCart(item.id, { quantity: updatedItem.quantity });
+    setCart((prevItems) =>
+      prevItems.map((i) => (i.id === item.id ? updatedItem : i))
+    );
+  };
+
+  // Handle quantity decrease
+  const handleDecrease = async (item) => {
+    if (item.quantity > 1) {
+      const updatedItem = { ...item, quantity: item.quantity - 1 };
+      await updateCart(item.id, { quantity: updatedItem.quantity });
+      setCart((prevItems) =>
+        prevItems.map((i) => (i.id === item.id ? updatedItem : i))
+      );
+    }
+  };
+
+  // Handle item deletion
+  const handleDelete = async (item) => {
+    await deleteItem(item.id); // Assume deleteItem handles removing from localforage
+    setCart((prevItems) => prevItems.filter((i) => i.id !== item.id));
+  };
+
+  if (loading) {
+    return <div> Loading products ...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="p-8">
@@ -24,7 +65,7 @@ export default function ShoppingCart() {
         Shopping Cart
       </h1>
       <div id="cart-container" className="flex flex-col gap-5 m-3">
-        {itemsInCart.map((item) => (
+        {cart.map((item) => (
           <div
             id="item-card"
             key={item.id}
@@ -51,10 +92,17 @@ export default function ShoppingCart() {
               <div className="text-2xl font-bold text-center">
                 {"$" + formatPrice(item.price)}
               </div>
-              <QuantityBtn quantity={item.quantity} />
+              <QuantityBtn
+                quantity={item.quantity}
+                increaseQuantity={() => handleIncrease(item)}
+                decreaseQuantity={() => handleDecrease(item)}
+              />
             </div>
             <div>
-              <button className="cursor-pointer hover:text-red-500">
+              <button
+                className="cursor-pointer hover:text-red-500"
+                onClick={() => handleDelete(item)}
+              >
                 <RiDeleteBin6Line size={32} />
               </button>
             </div>
